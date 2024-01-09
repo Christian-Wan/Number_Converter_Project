@@ -8,9 +8,9 @@ class ConverterRunner {
 
         System.out.println("Welcome to the Number Converter!");
         System.out.println("--------------------------------");
-        int[] acceptable = {2, 8, 10};
+        int[] acceptable = {2, 8, 10, 16};
         do {
-            System.out.print("Enter the base of your number (2, 8 or 10): ");
+            System.out.print("Enter the base of your number (2, 8, 10 or 16): ");
             String choice = s.nextLine();
             try {
                 base = Integer.parseInt(choice);

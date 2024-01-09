@@ -1,6 +1,10 @@
+import java.util.Arrays;
+
 public class NumberConverter {
-    int[] digits;
+    int[] digits; //convert this to char
     int base;
+
+    final char[] CONVERSIONS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '+', '/'};
 
     public NumberConverter(int number, int base) {
         String numberAsString = Integer.toString(number);
@@ -34,10 +38,17 @@ public class NumberConverter {
                 }
             }
         }
-        else {
+        else if (base == 8) {
             for (int i = 0; i < digits.length; i++) {
                 if (digits[i] != 0) {
                     number += digits[i] * Math.pow(8, digits.length - 1 - i);
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < digits.length; i++) {
+                if (digits[i] != 0) {
+                    number += Arrays.binarySearch(CONVERSIONS, digits[i]);// refer back to line 4
                 }
             }
         }
@@ -65,9 +76,9 @@ public class NumberConverter {
         }
 
 
-        for (int i = highest; highest >= 0; i--) {
-            if (original > Math.pow(2, highest)) {
-                original -= Math.pow(2, highest);
+        for (int i = highest; i >= 0; i--) {
+            if (original >= Math.pow(2, i)) {
+                original -= Math.pow(2, i);
                 number += "1";
             }
             else {
@@ -89,18 +100,21 @@ public class NumberConverter {
         }
         int highest = 0;
 
+
         while (original >= Math.pow(8, highest)) {
             highest++;
         }
         if (highest != 0) {
             highest--;
         }
-        for (int i = highest; highest >= 0; i--) {
-            if (original > Math.pow(8, highest)) {
-                for (int x = 8; x > 0; x++) {
-                    if (original > i * Math.pow(8, highest)) {
-                        original -= i * Math.pow(8, highest);
-                        number += i;
+
+
+        for (int i = highest; i >= 0; i--) {
+            if (original >= Math.pow(8, i)) {
+                for (int x = 8; x > 0; x--) {
+                    if (original >= x * Math.pow(8, i)) {
+                        original -= x * Math.pow(8, i);
+                        number += x;
                         break;
                     }
                 }
@@ -112,19 +126,31 @@ public class NumberConverter {
         return Integer.parseInt(number);
     }
 
+    public int convertToHex() {
+
+    }
+
     public String conversions() {
         String printing = "";
-        if (base == 10) {
+        if (base == 16) {
             printing = "Binary number: " + convertToBinary() +
-                    "\nOctal number: " + convertToOctal();
+                    "\nOctal number: " + convertToOctal() +
+                    "\nDecimal number" + convertToDecimal();
+        }
+        else if (base == 10) {
+            printing = "Binary number: " + convertToBinary() +
+                    "\nOctal number: " + convertToOctal() +
+                    "\nHex number: " + convertToHex();
         }
         else if (base == 8) {
             printing = "Binary number: " + convertToBinary() +
-                    "\nDecimal number: " + convertToDecimal();
+                    "\nDecimal number: " + convertToDecimal() +
+                    "\nHex number: " + convertToHex();
         }
         else {
             printing = "Octal number: " + convertToOctal() +
-                    "\nDecimal number: " + convertToDecimal();
+                    "\nDecimal number: " + convertToDecimal() +
+                    "\nHex number: " + convertToHex();
         }
         return printing;
     }
