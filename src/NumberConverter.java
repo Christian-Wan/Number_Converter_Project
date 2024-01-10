@@ -1,20 +1,19 @@
 import java.util.Arrays;
 
 public class NumberConverter {
-    int[] digits; //convert this to char
-    int base;
+    private char[] digits; //convert this to char
+    private int base;
+    private int extra;
+    private final char[] CONVERSIONS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '+', '/'};
 
-    final char[] CONVERSIONS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '+', '/'};
-
-    public NumberConverter(int number, int base) {
-        String numberAsString = Integer.toString(number);
-        digits = new int[numberAsString.length()];
-        for (int i = 0; i < numberAsString.length(); i++) {
-            String single = numberAsString.substring(i,i+1);
-            int d = Integer.parseInt(single);
-            digits[i] = d;
+    public NumberConverter(String number, int base, int extra) {
+        digits = new char[number.length()];
+        for (int i = 0; i < number.length(); i++) {
+            char single = number.charAt(i);
+            digits[i] = single;
         }
         this.base = base;
+        this.extra = extra;
     }
 
     public String displayOriginalNumber() {
@@ -25,7 +24,7 @@ public class NumberConverter {
         return o;
     }
 
-    public int[] getDigits() {
+    public char[] getDigits() {
         return digits;
     }
 
@@ -48,47 +47,14 @@ public class NumberConverter {
         else {
             for (int i = 0; i < digits.length; i++) {
                 if (digits[i] != 0) {
-                    number += Arrays.binarySearch(CONVERSIONS, digits[i]);// refer back to line 4
+                    number += Arrays.binarySearch(CONVERSIONS, digits[i]) * Math.pow(16, digits.length - 1 - i);
                 }
             }
         }
         return number;
     }
 
-    public int convertToBinary() {
-        //Finds and sets all variables
-        String number = "";
-        int original = 0;
-        if (base == 10) {
-            original = Integer.parseInt(displayOriginalNumber());
-        }
-        else {
-            original = convertToDecimal();
-        }
-        int highest = 0;
-
-
-        while (original >= Math.pow(2, highest)) { //not inf
-            highest++;
-        }
-        if (highest != 0) {
-            highest--;
-        }
-
-
-        for (int i = highest; i >= 0; i--) {
-            if (original >= Math.pow(2, i)) {
-                original -= Math.pow(2, i);
-                number += "1";
-            }
-            else {
-                number += "0";
-            }
-        }
-        return Integer.parseInt(number);
-    }
-
-    public int convertToOctal() {
+    public String convertToChoice(int transformation) {
         //finds and sets all variables
         String number = "";
         int original = 0;
@@ -100,57 +66,61 @@ public class NumberConverter {
         }
         int highest = 0;
 
+        if (transformation != 1) {
+            while (original >= Math.pow(transformation, highest)) {
+                highest++;
+            }
+            if (highest != 0) {
+                highest--;
+            }
 
-        while (original >= Math.pow(8, highest)) {
-            highest++;
-        }
-        if (highest != 0) {
-            highest--;
-        }
 
-
-        for (int i = highest; i >= 0; i--) {
-            if (original >= Math.pow(8, i)) {
-                for (int x = 8; x > 0; x--) {
-                    if (original >= x * Math.pow(8, i)) {
-                        original -= x * Math.pow(8, i);
-                        number += x;
-                        break;
+            for (int i = highest; i >= 0; i--) {
+                if (original >= Math.pow(transformation, i)) {
+                    for (int x = transformation; x > 0; x--) {
+                        if (original >= x * Math.pow(transformation, i)) {
+                            original -= x * Math.pow(transformation, i);
+                            number += CONVERSIONS[x];
+                            break;
+                        }
                     }
+                } else {
+                    number += "0";
                 }
             }
-            else {
-                number += "0";
+        }
+        else {
+            for (int i = 0; i < original; i++) {
+                number += 1;
             }
         }
-        return Integer.parseInt(number);
-    }
-
-    public int convertToHex() {
-
+        return number;
     }
 
     public String conversions() {
         String printing = "";
         if (base == 16) {
-            printing = "Binary number: " + convertToBinary() +
-                    "\nOctal number: " + convertToOctal() +
-                    "\nDecimal number" + convertToDecimal();
+            printing = "Binary number: " + convertToChoice(2) +
+                    "\nOctal number: " + convertToChoice(8) +
+                    "\nDecimal number: " + convertToChoice(10);
         }
         else if (base == 10) {
-            printing = "Binary number: " + convertToBinary() +
-                    "\nOctal number: " + convertToOctal() +
-                    "\nHex number: " + convertToHex();
+            printing = "Binary number: " + convertToChoice(2) +
+                    "\nOctal number: " + convertToChoice(8) +
+                    "\nHex number: " + convertToChoice(16);
         }
         else if (base == 8) {
-            printing = "Binary number: " + convertToBinary() +
-                    "\nDecimal number: " + convertToDecimal() +
-                    "\nHex number: " + convertToHex();
+            printing = "Binary number: " + convertToChoice(2) +
+                    "\nDecimal number: " + convertToChoice(10) +
+                    "\nHex number: " + convertToChoice(16);
         }
         else {
-            printing = "Octal number: " + convertToOctal() +
-                    "\nDecimal number: " + convertToDecimal() +
-                    "\nHex number: " + convertToHex();
+            printing = "Octal number: " + convertToChoice(8) +
+                    "\nDecimal number: " + convertToChoice(10) +
+                    "\nHex number: " + convertToChoice(16);
+        }
+        if (extra != 0) {
+            printing += "\nBase " + extra + " number: " + convertToChoice(extra);
         }
         return printing;
     }
