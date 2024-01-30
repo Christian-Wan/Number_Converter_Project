@@ -16,6 +16,10 @@ public class NumberConverter {
         this.extra = extra;
     }
 
+    public int getBase() {
+        return base;
+    }
+
     public String displayOriginalNumber() {
         String o = "";
         for (int i = 0; i < digits.length; i++) {
@@ -32,25 +36,26 @@ public class NumberConverter {
         int number = 0;
         if (base == 2) {
             for (int i = 0; i < digits.length; i++) {
-                if (digits[i] == 1) {
+                if (digits[i] == '1') {
                     number += Math.pow(2, digits.length - 1 - i);
                 }
             }
         }
         else if (base == 8) {
             for (int i = 0; i < digits.length; i++) {
-                if (digits[i] != 0) {
-                    number += digits[i] * Math.pow(8, digits.length - 1 - i);
+                if (digits[i] != '0') {
+                    number += Character.getNumericValue(digits[i]) * Math.pow(8, digits.length - 1 - i);
                 }
             }
         }
         else {
             for (int i = 0; i < digits.length; i++) {
-                if (digits[i] != 0) {
+                if (digits[i] != '0') {
                     number += Arrays.binarySearch(CONVERSIONS, digits[i]) * Math.pow(16, digits.length - 1 - i);
                 }
             }
         }
+        System.out.println(number);
         return number;
     }
 

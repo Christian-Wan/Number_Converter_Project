@@ -41,11 +41,13 @@ class ConverterRunner {
 
         s.close();
 
+
         NumberConverter nc = new NumberConverter(n, base, extra);
-//        char[] digits = nc.getDigits();
-//        System.out.println("\n\nDigit array: " + Arrays.toString(digits));
-//        System.out.println("Number: " + nc.displayOriginalNumber());
-//        System.out.println();
+        char[] digits = nc.getDigits();
+        System.out.println("\n\nDigit array: " + Arrays.toString(digits));
+        System.out.println("Number: " + nc.displayOriginalNumber());
+        System.out.println(nc.getBase());
+        System.out.println();
 
         System.out.println(nc.conversions());
     }
