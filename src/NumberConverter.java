@@ -32,6 +32,15 @@ public class NumberConverter {
         return digits;
     }
 
+    public boolean checkValid() {
+        for (int i = 0; i < digits.length; i++) {
+            if (Arrays.binarySearch(CONVERSIONS, digits[i]) > base) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public int convertToDecimal() {
         int number = 0;
         if (base == 2) {
@@ -55,7 +64,6 @@ public class NumberConverter {
                 }
             }
         }
-        System.out.println(number);
         return number;
     }
 

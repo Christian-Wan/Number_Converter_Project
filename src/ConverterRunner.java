@@ -35,18 +35,22 @@ class ConverterRunner {
             } while (!InputChecker.checkInteger(acceptable, extra));
         }
 
-
-        System.out.print("Enter your number: ");
-        String n = s.nextLine();
+        String n = "";
+        NumberConverter nc = new NumberConverter(n, base, extra);
+        char[] acceptableChar = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '+', '/'};
+        do {
+            System.out.print("Enter your number: ");
+            n = s.nextLine();
+            nc = new NumberConverter(n, base, extra);
+        } while (!nc.checkValid() || !InputChecker.checkNumber(acceptableChar, n) || n.isEmpty());
 
         s.close();
 
 
-        NumberConverter nc = new NumberConverter(n, base, extra);
+
         char[] digits = nc.getDigits();
         System.out.println("\n\nDigit array: " + Arrays.toString(digits));
         System.out.println("Number: " + nc.displayOriginalNumber());
-        System.out.println(nc.getBase());
         System.out.println();
 
         System.out.println(nc.conversions());
